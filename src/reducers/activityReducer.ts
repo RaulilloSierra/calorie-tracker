@@ -1,30 +1,48 @@
 import { Activities } from "../types";
 
-export type ActivityActions = {
-  type: "save-activity";
-  payload: {
-    newActivity: Activities;
-  };
-};
+export type ActivityActions =
+  | { type: "save-activity"; payload: { newActivity: Activities } }
+  | { type: "set-activeId"; payload: { id: Activities["id"] } };
 
-type ActivityState = {
+export type ActivityState = {
   activities: Activities[];
+  activeId: Activities["id"];
 };
 
 export const initialState: ActivityState = {
   activities: [],
+  activeId: "",
 };
 
 export const activityReducer = (
   state: ActivityState = initialState,
   action: ActivityActions
 ) => {
-  if (action.type === "save-activity") {
-    // Este código maneja la lógica para actualizar el state
-    return {
-      ...state,
-      activities: [...state.activities, action.payload.newActivity],
-    };
+  switch (action.type) {
+    case "save-activity":
+      // A partir de aquí se puede codear lógica hasta el return
+      let updateActivities: Activities[] = [];
+      if (state.activeId) {
+        updateActivities = state.activities.map((act) =>
+          act.id === state.activeId ? action.payload.newActivity : act
+        );
+      } else {
+        updateActivities = [...state.activities, action.payload.newActivity];
+      }
+      return {
+        ...state,
+        activities: updateActivities,
+        activeId: "",
+      };
+    case "set-activeId":
+      return {
+        ...state,
+        activeId: action.payload.id,
+      };
+
+    default:
+      return {
+        ...state,
+      };
   }
-  return state;
 };
