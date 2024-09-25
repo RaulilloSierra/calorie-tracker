@@ -1,10 +1,15 @@
-import { useReducer } from "react";
+import { useEffect, useReducer } from "react";
 import Form from "./components/Form.tsx";
 import { activityReducer, initialState } from "./reducers/activityReducer.ts";
 import ActivityList from "./components/ActivityList.tsx";
 
 function App() {
   const [state, dispatch] = useReducer(activityReducer, initialState);
+
+  useEffect(() => {
+    localStorage.setItem("activities", JSON.stringify(state.activities));
+  }, [state.activities]);
+
   return (
     <>
       <header className="bg-green-600 py-3">
