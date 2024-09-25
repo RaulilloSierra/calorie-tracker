@@ -1,6 +1,26 @@
+import { useState, ChangeEvent } from "react";
 import { categories } from "../data/categories.ts";
+import type { Activities } from "../types/index.ts";
 
 function Form() {
+  const [activity, setActivity] = useState<Activities>({
+    category: 1,
+    name: "",
+    calories: 0,
+  });
+
+  const handleChange = (
+    e: ChangeEvent<HTMLSelectElement> | ChangeEvent<HTMLInputElement>
+  ) => {
+    const { value, id } = e.target;
+    const isNumberfield = ["category", "calories"].includes(id);
+    console.log(isNumberfield);
+    setActivity({
+      ...activity,
+      [id]: isNumberfield ? +value : value,
+    });
+  };
+
   return (
     <div>
       <form className="space-y-5 bg-white shadow p-10 rounded-lg">
@@ -9,38 +29,43 @@ function Form() {
             Categoria:{" "}
           </label>
           <select
-            name=""
             id="category"
             className="border border-slate-300 rounded-lg w-full bg-white p-2"
+            value={activity.category}
+            onChange={handleChange}
           >
             {" "}
             {categories.map((category) => (
-              <option value={category.name} key={category.id}>
+              <option value={category.id} key={category.id}>
                 {category.name}
               </option>
             ))}
           </select>
         </div>
         <div className="grid grid-cols-1 gap-3">
-          <label htmlFor="activity" className="font-bold">
+          <label htmlFor="name" className="font-bold">
             Actividad:{" "}
           </label>
           <input
-            id="activity"
+            id="name"
             type="text"
             className="border-slate-300 p-2 rounded-lg border"
             placeholder="Ej. comida, jugo de naranja, caminata, entre otros"
+            value={activity.name}
+            onChange={handleChange}
           />
         </div>
         <div className="grid grid-cols-1 gap-3">
           <label htmlFor="calories" className="font-bold">
-            Actividad:{" "}
+            Calorias:{" "}
           </label>
           <input
             id="calories"
             type="number"
             className="border-slate-300 p-2 rounded-lg border"
             placeholder="Calorias. Ej. 200"
+            value={activity.calories}
+            onChange={handleChange}
           />
 
           <input
