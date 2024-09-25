@@ -1,8 +1,13 @@
-import { useState, ChangeEvent } from "react";
+import { useState, ChangeEvent, FormEvent, Dispatch } from "react";
 import { categories } from "../data/categories.ts";
 import type { Activities } from "../types/index.ts";
+import { ActivityActions } from "../reducers/activityReducer.ts";
 
-function Form() {
+type FormProps = {
+  dispatch: Dispatch<ActivityActions>;
+};
+
+function Form({ dispatch }: FormProps) {
   const [activity, setActivity] = useState<Activities>({
     category: 1,
     name: "",
@@ -14,7 +19,6 @@ function Form() {
   ) => {
     const { value, id } = e.target;
     const isNumberfield = ["category", "calories"].includes(id);
-    console.log(isNumberfield);
     setActivity({
       ...activity,
       [id]: isNumberfield ? +value : value,
@@ -26,9 +30,17 @@ function Form() {
     return name.trim() !== "" && calories > 0;
   };
 
+  const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    dispatch({ type: "save-activity", payload: { newActivity: activity } });
+  };
+
   return (
-    <div>
-      <form className="space-y-5 bg-white shadow p-10 rounded-lg">
+    <>
+      <form
+        className="space-y-5 bg-white shadow p-10 rounded-lg"
+        onSubmit={handleSubmit}
+      >
         <div className="grid grid-cols-1 gap-3">
           <label htmlFor="category" className="font-bold">
             Categoria:{" "}
@@ -76,12 +88,14 @@ function Form() {
           <input
             className="bg-gray-800 hover:bg-gray-600 w-full p-2 font-bold uppercase text-white cursor-pointer disabled:opacity-10 disabled:cursor-no-drop"
             type="submit"
-            value={activity.category === 1 ? 'Guardar comida' : 'Guardar ejercicio'}
+            value={
+              activity.category === 1 ? "Guardar comida" : "Guardar ejercicio"
+            }
             disabled={!isValidActivity()}
           />
         </div>
       </form>
-    </div>
+    </>
   );
 }
 
