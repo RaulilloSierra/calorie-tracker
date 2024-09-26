@@ -3,7 +3,8 @@ import { Activities } from "../types";
 export type ActivityActions =
   | { type: "save-activity"; payload: { newActivity: Activities } }
   | { type: "set-activeId"; payload: { id: Activities["id"] } }
-  | { type: "delete-activity"; payload: { id: Activities["id"] } };
+  | { type: "delete-activity"; payload: { id: Activities["id"] } }
+  | { type: "restart-app" };
 
 export type ActivityState = {
   activities: Activities[];
@@ -51,6 +52,11 @@ export const activityReducer = (
         activities: state.activities.filter(
           (act) => act.id !== action.payload.id
         ),
+      };
+    case "restart-app":
+      return {
+        activities: [],
+        activeId: "",
       };
 
     default:

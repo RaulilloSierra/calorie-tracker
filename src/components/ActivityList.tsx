@@ -1,7 +1,7 @@
 import { useMemo, Dispatch } from "react";
+import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Activities } from "../types";
 import { categories } from "../data/categories.ts";
-import { PencilSquareIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { ActivityActions } from "../reducers/activityReducer.ts";
 
 type ActivityListProps = {
