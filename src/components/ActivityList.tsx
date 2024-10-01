@@ -27,7 +27,7 @@ function ActivityList({ activities, dispatch }: ActivityListProps) {
       </h2>
       {isEmptyActivities ? (
         <p className="text-center p-6 text-2xl">
-          Aun no se ha agregado nada :)
+          {`Aun no se ha agregado nada :)`}
         </p>
       ) : (
         activities.map((act) => (
